@@ -13,7 +13,7 @@ const addGaps = (string = "", gaps) => {
   }).filter(part => part !== "").join(" ");
 };
 
-const FALLBACK_CARD = { gaps: [4, 8, 12], lengths: [16], code: { size: 3 } };
+const FALLBACK_CARD = { gaps: [4, 8, 12, 16], lengths: [19], code: { size: 3 } };
 export default class CCFieldFormatter {
   constructor(displayedFields) {
     this._displayedFields = [...displayedFields, "type"];

@@ -2,6 +2,7 @@ import valid from "card-validator";
 import pick from "lodash.pick";
 import values from "lodash.values";
 import every from "lodash.every";
+const CardType = require("credit-card-type").types;
 
 const toStatus = validation => {
   return validation.isValid ? "valid" :
@@ -9,7 +10,7 @@ const toStatus = validation => {
          "invalid";
 };
 
-const FALLBACK_CARD = { gaps: [4, 8, 12], lengths: [16], code: { size: 3 } };
+const FALLBACK_CARD = { gaps: [4, 8, 12, 16], lengths: [19], code: { size: 3 } };
 export default class CCFieldValidator {
   constructor(displayedFields, validatePostalCode) {
     this._displayedFields = displayedFields;
@@ -17,7 +18,13 @@ export default class CCFieldValidator {
   }
 
   validateValues = (formValues) => {
-    const numberValidation = valid.number(formValues.number);
+    let numberValidation = valid.number(formValues.number);
+    numberValidation = numberValidation &&
+    numberValidation.card.type === CardType.MASTERCARD ||
+    // numberValidation.card.type === CardType.VISA ||
+    numberValidation.card.type === CardType.MAESTRO ?
+    numberValidation : null;
+
     const expiryValidation = valid.expirationDate(formValues.expiry);
     const maxCVCLength = (numberValidation.card || FALLBACK_CARD).code.size;
     const cvcValidation = valid.cvv(formValues.cvc, maxCVCLength);

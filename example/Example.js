@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {
   StyleSheet,
-  View,
+  View, Text,
 } from "react-native";
 
 import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-input";
@@ -24,11 +24,12 @@ const s = StyleSheet.create({
 const USE_LITE_CREDIT_CARD_INPUT = false;
 
 export default class Example extends Component {
-  _onChange = formData => {
-    /* eslint no-console: 0 */
-    console.log(JSON.stringify(formData, null, " "));
-  };
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      formData: {}
+    };
+  }
   _onFocus = field => {
     /* eslint no-console: 0 */
     console.log(field);
@@ -39,31 +40,31 @@ export default class Example extends Component {
       <View style={s.container}>
         { USE_LITE_CREDIT_CARD_INPUT ?
           (<LiteCreditCardInput
-              autoFocus
-              inputStyle={s.input}
+            autoFocus
+            inputStyle={s.input}
 
-              validColor={"black"}
-              invalidColor={"red"}
-              placeholderColor={"darkgray"}
+            validColor={"black"}
+            invalidColor={"red"}
+            placeholderColor={"darkgray"}
 
-              onFocus={this._onFocus}
-              onChange={this._onChange} />) :
-            (<CreditCardInput
-                autoFocus
+            onFocus={this._onFocus}
+            onChange={ (formData) => this.setState({ formData })} />) :
+          (<CreditCardInput
+            autoFocus
 
-                requiresName
-                requiresCVC
-                requiresPostalCode
+            requiresName
+            requiresCVC
 
-                labelStyle={s.label}
-                inputStyle={s.input}
-                validColor={"black"}
-                invalidColor={"red"}
-                placeholderColor={"darkgray"}
+            labelStyle={s.label}
+            inputStyle={s.input}
+            validColor={"black"}
+            invalidColor={"red"}
+            placeholderColor={"darkgray"}
 
-                onFocus={this._onFocus}
-                onChange={this._onChange} />)
+            onFocus={this._onFocus}
+            onChange={ (formData) => this.setState({ formData })} />)
         }
+        <Text>{JSON.stringify(this.state.formData, null, 4)}</Text>
       </View>
     );
   }
